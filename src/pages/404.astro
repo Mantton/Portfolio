@@ -1,0 +1,25 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Topbar from '../components/Topbar.astro';
+---
+
+<Layout
+  title="Page Not Found - Mantton"
+  description="The requested page could not be found on Mantton."
+  canonicalPath="/404/"
+  robots="noindex"
+>
+  <div class="grain" aria-hidden="true"></div>
+  <Topbar />
+  <main class="not-found" id="top">
+    <div class="nf-bg" aria-hidden="true"></div>
+    <section class="nf-content" aria-labelledby="not-found-title">
+      <div class="nf-kicker">404 / Lost Route</div>
+      <h1 id="not-found-title">Page not found</h1>
+      <p>That page isn't here.</p>
+      <a class="btn solid" href="/">
+        Return Home <span class="arrow">↗</span>
+      </a>
+    </section>
+  </main>
+</Layout>

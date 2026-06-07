@@ -1,0 +1,82 @@
+---
+import CodeShowcase from './CodeShowcase';
+import SuwatteScreenshots from './SuwatteScreenshots';
+import { projects, taroCodeSamples } from '../data/projects';
+---
+
+<section class="section-head" id="projects">
+  <div class="num">§ 01</div>
+  <h2>Projects</h2>
+  <div class="meta">02 / FEATURED — UPDATED Q2 2026</div>
+</section>
+
+<div class="projects">
+  {
+    projects.map((project) => (
+      <article class:list={['project', { featured: project.featured }]}>
+        <div class="p-num">
+          <span class="slash">//</span> {project.number}
+        </div>
+
+        <div class="p-main">
+          <div class="p-tag-row">
+            {project.goldTags.map((tag) => (
+              <span class="tag gold">{tag}</span>
+            ))}
+            {project.tags.map((tag) => (
+              <span class="tag">{tag}</span>
+            ))}
+          </div>
+
+          <div>
+            <div class="p-sub">{project.subtitle}</div>
+            <h3 class="p-title">{project.title}</h3>
+          </div>
+
+          <p class="p-desc" set:html={project.descriptionHtml} />
+        </div>
+
+        <div class="p-side">
+          <div class="p-side-top">
+            <div class="p-arrow">↗</div>
+            <div class="p-stack">
+              {project.stackLines.map((line, index) => (
+                <>
+                  {line}
+                  {index < project.stackLines.length - 1 && <br />}
+                </>
+              ))}
+            </div>
+          </div>
+
+          {project.metrics && (
+            <div class="p-metrics">
+              {project.metrics.map((metric) => (
+                <div class="m" style={metric.wide ? 'grid-column: 1 / -1;' : undefined}>
+                  <div class="v">
+                    {metric.value}
+                    {metric.suffix && <span class="small">{metric.suffix}</span>}
+                  </div>
+                  <div class="k">{metric.label}</div>
+                </div>
+              ))}
+            </div>
+          )}
+
+          <div class:list={['p-links', { bordered: project.visual === 'taro' }]}>
+            {project.links.map((link) => (
+              <a href={link.href} target="_blank" rel="noopener">
+                {link.label}
+              </a>
+            ))}
+          </div>
+        </div>
+
+        <div class="visual">
+          {project.visual === 'suwatte' && <SuwatteScreenshots client:load />}
+          {project.visual === 'taro' && <CodeShowcase samples={taroCodeSamples} client:load />}
+        </div>
+      </article>
+    ))
+  }
+</div>
