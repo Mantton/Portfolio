@@ -385,6 +385,7 @@ canvas {
   will-change: transform;
 }
 
+.slot-static,
 .slot-track > span {
   display: block;
   padding: 0.04em 0 0.12em;
@@ -397,6 +398,8 @@ canvas {
 
 /* Arabic/Devanagari have tall marks above the baseline; give the slot greeting
    extra headroom so the slot's overflow:hidden doesn't shave their tops. */
+.slot-static[lang="ar"],
+.slot-static[lang="hi"],
 .slot-track > span[lang="ar"],
 .slot-track > span[lang="hi"] {
   padding-top: 0.28em;

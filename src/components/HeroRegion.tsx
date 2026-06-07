@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import type { RegionLanguage } from '../data/site';
 
 type Props = {
@@ -50,6 +50,7 @@ const STEP_MS = 4250;
 const LATIN_STEP_MS = 6250;
 
 type TextPhase = 'idle' | 'out' | 'in';
+const useBrowserLayoutEffect = typeof window === 'undefined' ? useEffect : useLayoutEffect;
 
 function stepDurationFor(language: RegionLanguage) {
   return language.key === 'la' ? LATIN_STEP_MS : STEP_MS;
@@ -225,6 +226,7 @@ export default function HeroRegion({ languages }: Props) {
   const [slotIndex, setSlotIndex] = useState(1);
   const [animateSlot, setAnimateSlot] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [slotReady, setSlotReady] = useState(false);
   const reducedMotion = usePrefersReducedMotion();
   const mountedRef = useRef(false);
 
@@ -240,6 +242,10 @@ export default function HeroRegion({ languages }: Props) {
   const activeImageSrc = isMobile ? language.imageSrcMobile : language.imageSrc;
   const activeCredit = isMobile ? language.creditMobile : language.credit;
 
+  useBrowserLayoutEffect(() => {
+    setSlotReady(true);
+  }, []);
+
   useEffect(() => {
     const update = () => setIsMobile(isMobileViewport());
     update();
@@ -252,7 +258,9 @@ export default function HeroRegion({ languages }: Props) {
     measureSlot(slotRef.current, trackRef.current, slotIndex);
   }, [slotIndex]);
 
-  useEffect(() => {
+  useBrowserLayoutEffect(() => {
+    if (!slotReady) return undefined;
+
     applySlotMeasurement();
 
     if (document.fonts?.ready) {
@@ -270,7 +278,7 @@ export default function HeroRegion({ languages }: Props) {
       window.clearTimeout(resizeTimer);
       window.removeEventListener('resize', onResize);
     };
-  }, [applySlotMeasurement]);
+  }, [applySlotMeasurement, slotReady]);
 
   useEffect(() => {
     if (reducedMotion) return undefined;
@@ -420,19 +428,25 @@ export default function HeroRegion({ languages }: Props) {
         <h1 id="hero-title">
           <span className="h-row">
             <span className="slot" ref={slotRef} aria-label={language.greeting}>
-              <span
-                className="slot-track"
-                ref={trackRef}
-                style={{
-                  transition: animateSlot && !reducedMotion ? undefined : 'transform 0s',
-                }}
-              >
-                {sequence.map((item, index) => (
-                  <span lang={item.key} key={`${item.key}-${index}`}>
-                    {item.greeting}
-                  </span>
-                ))}
-              </span>
+              {slotReady ? (
+                <span
+                  className="slot-track"
+                  ref={trackRef}
+                  style={{
+                    transition: animateSlot && !reducedMotion ? undefined : 'transform 0s',
+                  }}
+                >
+                  {sequence.map((item, index) => (
+                    <span lang={item.key} key={`${item.key}-${index}`}>
+                      {item.greeting}
+                    </span>
+                  ))}
+                </span>
+              ) : (
+                <span className="slot-static" lang={language.key}>
+                  {language.greeting}
+                </span>
+              )}
             </span>
           </span>
           <span className="h-row">
