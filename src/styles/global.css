@@ -98,14 +98,7 @@ canvas {
 .topbar .brand {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
   color: var(--ink);
-}
-
-.topbar .brand .dot {
-  width: 8px;
-  height: 8px;
-  background: var(--gold);
 }
 
 .topbar .status {

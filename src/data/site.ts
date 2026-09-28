@@ -23,6 +23,7 @@ export const site = {
   brand: 'Mantton',
   legalName: 'Shedrach Uzoukwu',
   location: 'Toronto, Canada',
+  email: 'hello@mantton.com',
   githubUrl: 'https://github.com/Mantton',
   xUrl: 'https://twitter.com/ceresmir',
 };

@@ -135,6 +135,10 @@ export const projects: Project[] = [
       { label: "Github ↗", href: "https://github.com/Suwatte/Suwatte" },
       { label: "Website ↗", href: "https://suwatte.mantton.com" },
       {
+        label: "App Store ↗",
+        href: "https://apps.apple.com/us/app/suwatte/id6448855813",
+      },
+      {
         label: "TestFlight ↗",
         href: "https://testflight.apple.com/join/8JYvZH1n",
       },
